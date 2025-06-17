@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Kuis Bertingkat</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 500px; margin: 30px auto; }
+    .question-container { margin-bottom: 20px; }
+    label { display: block; margin-bottom: 10px; font-weight: bold; }
+    input[type="text"] { width: 100%; padding: 8px; font-size: 1em; }
+    button { padding: 10px 20px; font-size: 1em; cursor: pointer; }
+    #result { margin-top: 20px; font-weight: bold; color: red; }
+    #level { margin-bottom: 20px; font-weight: bold; }
+  </style>
+</head>
+<body>
+
+  <h2>Escape Room</h2>
+  <div id="level"></div>
+
+  <div class="question-container">
+    <label id="questionLabel" for="answerInput"></label>
+    <input type="text" id="answerInput" />
+  </div>
+
+  <button onclick="submitAnswer()">Submit Jawaban</button>
+
+  <div id="result"></div>
+
+  <script>
+    const levels = [
+      {
+        name: "POS 1",
+        questions: [
+          { text: "1. Organ manusia yang berfungsi memompa darah adalah..", answer: ["jantung", "Jantung", "JANTUNG"] },
+          { text: "2. Pulau terluas di Indonesia adalah..", answer: ["kalimantan", "Kalimantan", "KALIMANTAN"] },
+          { text: "3. Negara dengan jumlah penduduk terbanyak di dunia adalah..", answer: ["india", "India", "INDIA"] },
+          { text: "4. Kamu ikut lomba lari. Kamu menyalip orang di posisi kedua. Sekarang kamu di posisi ke..?", answer: ["kedua", "Kedua", "Ke 2", "Ke-2", "ke 2", "ke dua", "Ke Dua", "ke Dua", "Ke dua", "ke-2", "KEDUA"] },
+          { text: "5. Jika kamu berada di ruangan gelap total, ada lilin, korek api, dan lampu minyak. Apa yang kamu nyalakan terlebih dahulu?", answer:, ["Korek Api", "korek api", "Korek api", KOREK API"] }
+          { text: "6. Planet yang dijuluki 'Planet Merah' adalah..", answer: ["Mars", "mars", "planet mars", "Planet Mars", "MARS", "PLANET MARS"] }
+          { text: "7. 10 lilin menyala di kamar. Angin dari jendela membuat 3 lilin padam dan akhirnya jendelanya ditutup. Jika tidak ada lilin yang padam setelah itu, berapa banyak lilin yang tersisa?", answer: ["3", "Tiga", "TIGA", "Tiga Lilin", "tiga lilin", "3 lilin", "3 Lilin"] },
+          { text: "8. Benua terkecil di dunia adalah..", answer: ["Australia", "australia", "AUSTRALIA", "Benua Australia", "Benua australia", "benua australia", "BENUA AUSTRALIA"] },
+          { text: "9. Negara manakah yang terkenal dengan Menara Eiffel?", answer: ["Prancis", "prancis", "PRANCIS"] },
+          { text: "10. Lagu 'Indonesia Raya' diciptakan oleh..", answer: ["W.R. Supratman", "w r supratman", "Wage Rudolf Supratman", "wage rudolf supratman", "W R Supratman"] },
+        ]
+      },
+      {
+        name: "POS 3",
+        questions: [
+          { text: "Cari dan input kode dari POS 2!!", answer: "9583" },
+          { text: "Kerjakkan Puzzlenya. Setelah itu input jawabannya!(clue:pindahkan)", answer: "86" },
+          { text: "Cari kode tersembunyi dari dua gambar tersebut. Gabungkan! (clue:4 angka)", answer: "5146" }
+        ]
+      },
+      {
+        name: "POS 4",
+        questions: [
+          { text: "Jumlahkan seluruhnya, maka hasilnya adalah..", answer: "455" }
+        ]
+      }
+    ];
+
+    let currentLevel = 0;
+    let currentIndex = 0;
+
+    const questionLabel = document.getElementById("questionLabel");
+    const answerInput = document.getElementById("answerInput");
+    const resultDiv = document.getElementById("result");
+    const levelTitle = document.getElementById("level");
+    const submitBtn = document.querySelector("button");
+
+    function showQuestion() {
+      const level = levels[currentLevel];
+      if (currentIndex < level.questions.length) {
+        levelTitle.textContent = level.name;
+        questionLabel.textContent = level.questions[currentIndex].text;
+        answerInput.value = "";
+        answerInput.style.display = "inline-block";
+        submitBtn.style.display = "inline-block";
+        resultDiv.textContent = "";
+        resultDiv.style.color = "red";
+        answerInput.focus();
+      } else {
+        // Lanjut ke level berikutnya
+        currentLevel++;
+        currentIndex = 0;
+        if (currentLevel < levels.length) {
+          showQuestion();
+        } else {
+          // Selesai semua tingkatan
+          questionLabel.textContent = "";
+          levelTitle.textContent = "";
+          answerInput.style.display = "none";
+          submitBtn.style.display = "none";
+          resultDiv.style.color = "green";
+          resultDiv.textContent = "Selamat! Kalian berhasil menyelesaikan 'Escape Room'.";
+        }
+      }
+    }
+
+    function submitAnswer() {
+      const level = levels[currentLevel];
+      const userAnswer = answerInput.value.trim();
+      if (userAnswer === level.questions[currentIndex].answer) {
+        currentIndex++;
+        showQuestion();
+      } else {
+        resultDiv.textContent = "Jawaban salah, ayo coba lagi!";
+        answerInput.focus();
+      }
+    }
+
+    // Tampilkan pertanyaan pertama saat halaman dibuka
+    showQuestion();
+  </script>
+
+</body>
+</html>
